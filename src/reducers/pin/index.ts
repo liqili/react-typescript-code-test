@@ -3,9 +3,10 @@ import * as types from '../../actions/pin/types';
 import { PinType } from '../../interfaces/pin';
 
 
-const add = (state: { pins: PinType[]; }, { payload }: any) => ({
+const add = (state: { nextId: number, pins: PinType[]; }, { payload }: any) => ({
   ...state,
-  pins: [...state.pins, payload.pin],
+  pins: [...state.pins, { ...payload.pin, id: state.nextId}],
+  nextId: state.nextId+1
 });
 
 const remove = (state: { pins: PinType[]; }, { payload }: any) => ({

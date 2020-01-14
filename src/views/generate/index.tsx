@@ -3,30 +3,48 @@ import PinComponent from '../../components/pin';
 import { useStoreReducer } from '../../store/default';
 import { addPin } from '../../actions/pin';
 import { useState } from 'react';
+import { PinType } from '../../interfaces/pin';
 
 
 const GenerateView: React.FC = () => {
 
 
     const [pinName, setPinName] = useState('');
-    const [pinValues, setPinValues] = useState<string[]|undefined>(undefined);
+    const [pinValues, setPinValues] = useState<string[] | undefined>(undefined);
 
-    // const onSaveClickHandler = () => {
-    //     let pinValues: string[] = [];
-    //     if (onSave)
-    //         onSave(pinName, pinValues);
-    // }
-
-    const generatePinValues = ()=>{
-        return ['7635','7635','7635','7635','7635'];
+    const generatePinValues = () => {
+        let arr = [];
+        let regx = /([0-9])\1+|([^0-9]|012|123|234|345|456|567|678|789)+/;
+        while (arr.length < 5) {
+            let r = Math.floor(Math.random() * 9000) + 1000;
+            if (arr.indexOf(r) === -1 && !regx.test(r.toString())) arr.push(r);
+        }
+        return arr.map(String);
     }
 
+    const { state: { pins }, dispatch } = useStoreReducer();
+
+    const onSaveHandler = () => {
+        if(!pinName){
+            alert('Please enter a name!');
+            return;
+        }
+        if (pinValues && pinValues.length === 5) {
+            let joinValue = pinValues.join('-');
+            pins.forEach((item:PinType) => {
+                if (item.values && joinValue === item.values.join('-')){
+                    alert(`The pin ${joinValue} already exists!`);
+                    return;
+                }
+            });
+            dispatch(addPin({ name: pinName, values: pinValues }));
+        }
+    }
 
     const onGenerateHandler = () => {
         setPinValues(generatePinValues());
     }
 
-    const { dispatch } = useStoreReducer();
 
     return (
         <>
@@ -36,7 +54,7 @@ const GenerateView: React.FC = () => {
             </div>
             <div className="d-flex justify-content-center mt-2">
                 <button type="button" className="btn btn-outline-primary m-1" onClick={onGenerateHandler}>GENERATE</button>
-                <button type="button" className="btn btn-primary m-1" onClick={e => pinName && pinValues && pinValues.length === 5 && dispatch(addPin({ name: pinName, values: pinValues }))}>SAVE</button>
+                <button type="button" className="btn btn-primary m-1" onClick={onSaveHandler}>SAVE</button>
             </div>
         </>
     );
