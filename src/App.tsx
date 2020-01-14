@@ -1,4 +1,3 @@
-import './App.scss';
 import React from 'react';
 import { Switch, Route, Router, NavLink, Redirect } from "react-router-dom";
 import { createBrowserHistory } from 'history';

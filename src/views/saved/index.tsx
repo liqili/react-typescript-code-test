@@ -2,18 +2,19 @@ import * as React from 'react'
 import PinComponent from '../../components/pin';
 import { useStoreReducer } from '../../store/default';
 import { PinType } from '../../interfaces/pin';
+import { removePin } from '../../actions/pin';
 
 
 const SavedView: React.FC = () => {
-    const { state } = useStoreReducer();
-    // dispatch(addPin({
-    //     id: 1,
-    //     name: 'testtest',
-    //     values: ['1112', '1112', '1113', '1114'],
-    // }));
+    const { state, dispatch } = useStoreReducer();
 
-    let elements = state.pins.map((item: PinType, i:number) => (<PinComponent id={item.id} key={i} name={item.name} values={item.values} enableDelete={true} readOnly={true}></PinComponent>));
-    return <div className='d-flex flex-column'>{elements}</div>;
+    let elements = state.pins.map((item: PinType, i: number) => (
+        <div className='d-flex justify-content-center m-1' key={`div_${i}`}>
+            <PinComponent id={item.id} key={`pin_${i}`} name={item.name} values={item.values} ></PinComponent>
+            <button type="button" className="btn btn-danger" key={`button_${i}`} onClick={e=>dispatch(removePin(item))}>DELETE</button>
+        </div>
+    ));
+    return <div className='d-flex flex-column m-5'>{elements}</div>;
 }
 
 
