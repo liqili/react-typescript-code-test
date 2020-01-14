@@ -8,8 +8,6 @@ import { removePin } from '../../actions/pin';
 const SavedView: React.FC = () => {
     const { state, dispatch } = useStoreReducer();
 
-    // console.log(state);
-
     const onDeleteHandler = (item:PinType)=> (e:React.MouseEvent<HTMLElement>)=>dispatch(removePin(item));
 
     let elements = state.pins.map((item: PinType, i: number) => (

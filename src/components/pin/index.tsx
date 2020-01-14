@@ -5,9 +5,9 @@ interface PinProps extends PinType {
 }
 const PinComponent: React.FC<PinProps> = ({ id = 1, name, values = ['', '', '', '', ''], ...rest }) => {
 
-    let elements = values.map((item: string, i: number) => (<input {...rest} type="text" key={i} readOnly defaultValue={values[i]}></input>));
+    let elements = values.map((item: string, i: number) => (<input {...rest} type="text" key={i} readOnly value={values[i]}></input>));
     return <div className='d-flex'>
-        {name ? <input defaultValue={name} readOnly/> : ''}
+        {name ? <input value={name} readOnly/> : ''}
         {elements}
     </div>;
 }

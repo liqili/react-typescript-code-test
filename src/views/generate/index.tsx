@@ -21,23 +21,26 @@ const GenerateView: React.FC = () => {
         }
         return arr.map(String);
     }
-
     const { state: { pins }, dispatch } = useStoreReducer();
 
+
     const onSaveHandler = () => {
-        if(!pinName){
+        if (!pinName) {
             alert('Please enter a name!');
             return;
         }
         if (pinValues && pinValues.length === 5) {
             let joinValue = pinValues.join('-');
-            pins.forEach((item:PinType) => {
-                if (item.values && joinValue === item.values.join('-')){
-                    alert(`The pin ${joinValue} already exists!`);
-                    return;
+            let checkExist = false;
+            pins.forEach((item: PinType) => {
+                if (item.values && joinValue === item.values.join('-')) {
+                    checkExist = true;
                 }
             });
-            dispatch(addPin({ name: pinName, values: pinValues }));
+            if (!checkExist)
+                dispatch(addPin({ name: pinName, values: pinValues }));
+            else
+                alert(`The pin ${joinValue} already exists!`);
         }
     }
 
